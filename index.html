@@ -1,209 +1,204 @@
-import 'package:flutter/material.dart';
-import 'dart:math';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CGAC Hymn</title>
 
-class HymnHome extends StatefulWidget {
-  @override
-  _HymnHomeState createState() => _HymnHomeState();
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #020b2a;
+  color: white;
+  overflow: hidden;
 }
 
-class _HymnHomeState extends State<HymnHome>
-    with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-  late Animation<double> animation;
-
-  bool showList = false;
-
-  final List<String> hymns = [
-    "All Hail the Power",
-    "O Worship the King",
-    "Praise to the Lord",
-    "To God Be the Glory",
-    "Amazing Grace",
-    "What a Friend We Have in Jesus",
-    "Blessed Assurance",
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 3),
-    );
-
-    animation = CurvedAnimation(parent: controller, curve: Curves.easeInOut);
-
-    // Start transition after delay
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() => showList = true);
-      controller.forward();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF020B2A),
-      body: Stack(
-        children: [
-          // 🎵 Floating Music Notes
-          ...List.generate(12, (i) {
-            return AnimatedBuilder(
-              animation: controller,
-              builder: (_, __) {
-                double y = MediaQuery.of(context).size.height *
-                    (1 - (controller.value + i * 0.1) % 1);
-
-                return Positioned(
-                  left: Random().nextDouble() * 350,
-                  top: y,
-                  child: Icon(Icons.music_note,
-                      color: Colors.blueAccent.withOpacity(0.4)),
-                );
-              },
-            );
-          }),
-
-          // 🔵 Watermark Logo
-          Center(
-            child: Opacity(
-              opacity: 0.05,
-              child: Image.asset('assets/logo.png', width: 300),
-            ),
-          ),
-
-          // 📖 Animated Book + Title (Moves Up)
-          AnimatedBuilder(
-            animation: animation,
-            builder: (_, child) {
-              double topShift = 200 * animation.value;
-
-              return Positioned(
-                top: 120 - topShift,
-                left: 0,
-                right: 0,
-                child: Column(
-                  children: [
-                    // Logo circle glow
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.blueAccent,
-                            blurRadius: 25,
-                          )
-                        ],
-                      ),
-                      child: Image.asset('assets/logo.png'),
-                    ),
-
-                    SizedBox(height: 10),
-
-                    Text(
-                      "CGAC HYMN BOOKS",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(color: Colors.blueAccent, blurRadius: 10)
-                        ],
-                      ),
-                    ),
-
-                    Text(
-                      "version 1 - 757",
-                      style: TextStyle(color: Colors.blueAccent),
-                    ),
-
-                    SizedBox(height: 20),
-
-                    // 📖 Animated Book
-                    Transform.scale(
-                      scale: 1 + sin(controller.value * pi) * 0.05,
-                      child: Image.asset(
-                        'assets/hymn_book.png',
-                        width: 120,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-
-          // 📚 Index List (Fades + Slides In)
-          AnimatedBuilder(
-            animation: animation,
-            builder: (_, child) {
-              return Positioned(
-                top: MediaQuery.of(context).size.height *
-                    (0.45 - 0.2 * animation.value),
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Opacity(
-                  opacity: animation.value,
-                  child: ListView.builder(
-                    itemCount: hymns.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: Colors.blue.withOpacity(0.1),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.blueAccent,
-                              blurRadius: 10,
-                            )
-                          ],
-                        ),
-                        child: ListTile(
-                          title: Text(
-                            hymns[index],
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          leading: Text(
-                            "${index + 1}",
-                            style: TextStyle(color: Colors.blueAccent),
-                          ),
-                          trailing: Icon(Icons.arrow_forward_ios,
-                              color: Colors.blueAccent),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              );
-            },
-          ),
-
-          // 🔊 Bottom watermark text
-          Positioned(
-            bottom: 20,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Text(
-                "CGL MEDIA",
-                style: TextStyle(
-                  color: Colors.blueAccent.withOpacity(0.7),
-                  fontSize: 16,
-                  shadows: [
-                    Shadow(color: Colors.blueAccent, blurRadius: 15)
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+/* Container */
+.container {
+  position: relative;
+  height: 100vh;
 }
+
+/* Floating Music Notes */
+.note {
+  position: absolute;
+  top: 100%;
+  font-size: 20px;
+  color: rgba(77,166,255,0.4);
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-110vh); }
+}
+
+/* Watermark */
+.watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.05;
+  width: 300px;
+}
+
+/* Top Section */
+.top {
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  top: 30%;
+  transition: all 1.5s ease;
+}
+
+.top.moveUp {
+  top: 5%;
+}
+
+/* Logo Glow */
+.logoGlow {
+  width: 100px;
+  height: 100px;
+  margin: auto;
+  border-radius: 50%;
+  box-shadow: 0 0 30px #4da6ff;
+}
+
+.logoGlow img {
+  width: 100%;
+}
+
+/* Title */
+h1 {
+  margin: 10px 0 5px;
+  text-shadow: 0 0 10px #4da6ff;
+}
+
+.version {
+  color: #4da6ff;
+}
+
+/* Animated Book */
+.book {
+  width: 120px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Hymn List */
+.list {
+  position: absolute;
+  top: 60%;
+  width: 100%;
+  opacity: 0;
+  transition: all 1.5s ease;
+  height: 40%;
+  overflow-y: auto;
+}
+
+.list.show {
+  top: 35%;
+  opacity: 1;
+}
+
+.card {
+  margin: 10px 20px;
+  padding: 15px;
+  border-radius: 12px;
+  background: rgba(0,102,255,0.1);
+  box-shadow: 0 0 10px #4da6ff;
+  display: flex;
+  gap: 10px;
+}
+
+.card span {
+  color: #4da6ff;
+}
+
+/* Footer */
+.footer {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  color: #4da6ff;
+  text-shadow: 0 0 10px #4da6ff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- Floating Notes -->
+  <script>
+    for (let i = 0; i < 15; i++) {
+      const note = document.createElement("div");
+      note.className = "note";
+      note.innerText = "🎵";
+      note.style.left = (i * 7) + "%";
+      note.style.animationDelay = (i * 0.5) + "s";
+      document.body.appendChild(note);
+    }
+  </script>
+
+  <!-- Watermark -->
+  <img src="logo.png" class="watermark" />
+
+  <!-- Top Section -->
+  <div class="top" id="top">
+    <div class="logoGlow">
+      <img src="logo.png" />
+    </div>
+
+    <h1>CGAC HYMN BOOKS</h1>
+    <div class="version">version 1 - 757</div>
+
+    <img src="hymn_book.png" class="book" />
+  </div>
+
+  <!-- Hymn List -->
+  <div class="list" id="list"></div>
+
+  <!-- Footer -->
+  <div class="footer">CGL MEDIA</div>
+
+</div>
+
+<script>
+const hymns = [];
+for (let i = 1; i <= 50; i++) {
+  hymns.push("Hymn " + i);
+}
+
+const list = document.getElementById("list");
+
+hymns.forEach((hymn, i) => {
+  const card = document.createElement("div");
+  card.className = "card";
+
+  card.innerHTML = `
+    <span>${i + 1}</span>
+    <p>${hymn}</p>
+  `;
+
+  list.appendChild(card);
+});
+
+// Animate splash → index
+setTimeout(() => {
+  document.getElementById("top").classList.add("moveUp");
+  document.getElementById("list").classList.add("show");
+}, 1500);
+</script>
+
+</body>
+</html>
