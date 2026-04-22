@@ -2,36 +2,160 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CGAC Hymn Book</title>
-<link rel="stylesheet" href="css/style.css">
-</head>
 
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at center, #001a33, #000814);
+    color: white;
+    overflow: hidden;
+}
+
+/* SPLASH */
+#splash {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, #001a33, #000814);
+    z-index: 10;
+}
+
+/* BOOK */
+.book {
+    width: 200px;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px #00ccff);
+}
+
+/* TEXT */
+.title {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 28px;
+    color: #00ccff;
+    text-shadow: 0 0 15px #00ccff;
+}
+
+/* WATERMARK */
+.watermark {
+    position: absolute;
+    bottom: 40px;
+    font-size: 20px;
+    opacity: 0.6;
+    text-shadow: 0 0 10px #00ccff;
+}
+
+/* CENTER LOGO */
+.logo {
+    position: absolute;
+    width: 150px;
+    opacity: 0.15;
+    animation: glow 3s infinite alternate;
+}
+
+/* INDEX */
+#index {
+    display: none;
+    padding: 20px;
+}
+
+.hymn {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    background: rgba(0, 50, 100, 0.3);
+    box-shadow: 0 0 10px #00ccff;
+}
+
+/* ANIMATIONS */
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+    from { filter: drop-shadow(0 0 10px #00ccff); }
+    to { filter: drop-shadow(0 0 30px #00ccff); }
+}
+
+/* MUSIC NOTES */
+.note {
+    position: absolute;
+    font-size: 24px;
+    animation: move 10s linear infinite;
+    color: #00ccff;
+}
+
+@keyframes move {
+    0% { transform: translateY(100vh); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+
+</head>
 <body>
 
-<!-- BACKGROUND -->
-<div class="background"></div>
+<!-- SPLASH -->
+<div id="splash">
 
-<!-- MOVING MUSIC NOTES -->
-<div class="notes"></div>
+    <img src="logo.png" class="logo">
 
-<!-- CONTENT -->
-<div class="container">
+    <img src="book.png" class="book">
 
-    <!-- LOGO -->
-    <img src="assets/logo.png" class="logo">
-
-    <!-- WATERMARK -->
-    <h1 class="watermark">CGL MEDIA</h1>
-
-    <!-- GLASS BOX -->
-    <div class="glass-box">
-
-        <div class="grid" id="hymnGrid"></div>
-
+    <div class="title">
+        CGAC HYMN BOOKS<br>
+        1 - 757
     </div>
+
+    <div class="watermark">CGL MEDIA</div>
 
 </div>
 
-<script src="js/app.js"></script>
+<!-- INDEX -->
+<div id="index">
+
+    <h2 style="text-align:center;">Hymn Index</h2>
+
+    <div class="hymn">Hymn 1 - Praise and Worship</div>
+    <div class="hymn">Hymn 2 - The Love of God</div>
+    <div class="hymn">Hymn 3 - Christ and Salvation</div>
+    <div class="hymn">Hymn 4 - Christian Life</div>
+    <div class="hymn">Hymn 5 - Faith and Trust</div>
+
+</div>
+
+<script>
+
+/* SPLASH TO INDEX */
+setTimeout(() => {
+    document.getElementById("splash").style.display = "none";
+    document.getElementById("index").style.display = "block";
+    document.body.style.overflow = "auto";
+}, 4000);
+
+/* MUSIC NOTES */
+function createNote() {
+    const note = document.createElement("div");
+    note.classList.add("note");
+    note.innerHTML = "♪";
+    note.style.left = Math.random() * 100 + "vw";
+    note.style.animationDuration = (5 + Math.random() * 5) + "s";
+    document.body.appendChild(note);
+
+    setTimeout(() => note.remove(), 10000);
+}
+
+setInterval(createNote, 500);
+
+</script>
+
 </body>
 </html>
