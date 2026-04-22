@@ -1,159 +1,187 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CGAC Hymn Book</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: radial-gradient(circle at center, #001a33, #000814);
-    color: white;
-    overflow: hidden;
+body{
+margin:0;
+font-family:Arial;
+background:#000814;
+color:white;
+overflow:hidden;
 }
 
 /* SPLASH */
-#splash {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(circle, #001a33, #000814);
-    z-index: 10;
+#splash{
+position:fixed;
+width:100%;
+height:100%;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:#000814;
+z-index:10;
 }
 
-/* BOOK */
-.book {
-    width: 200px;
-    animation: float 3s ease-in-out infinite;
-    filter: drop-shadow(0 0 25px #00ccff);
+/* BOOK (CSS ANIMATED) */
+.book{
+width:180px;
+height:230px;
+background:linear-gradient(145deg,#001a33,#003366);
+border-radius:10px;
+box-shadow:0 0 40px #00ccff;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+font-weight:bold;
+animation:float 3s infinite;
 }
 
-/* TEXT */
-.title {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 28px;
-    color: #00ccff;
-    text-shadow: 0 0 15px #00ccff;
+.book span{
+color:#00ccff;
+text-shadow:0 0 15px #00ccff;
 }
 
-/* WATERMARK */
-.watermark {
-    position: absolute;
-    bottom: 40px;
-    font-size: 20px;
-    opacity: 0.6;
-    text-shadow: 0 0 10px #00ccff;
+/* LOGO WATERMARK */
+.logo{
+position:absolute;
+width:200px;
+opacity:0.1;
+border-radius:50%;
 }
 
-/* CENTER LOGO */
-.logo {
-    position: absolute;
-    width: 150px;
-    opacity: 0.15;
-    animation: glow 3s infinite alternate;
+/* CGL TEXT */
+.cgl{
+position:absolute;
+bottom:40px;
+font-size:22px;
+color:#00ccff;
+text-shadow:0 0 20px #00ccff;
 }
 
-/* INDEX */
-#index {
-    display: none;
-    padding: 20px;
+/* HOME */
+#home{
+display:none;
+padding:20px;
+text-align:center;
 }
 
-.hymn {
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 10px;
-    background: rgba(0, 50, 100, 0.3);
-    box-shadow: 0 0 10px #00ccff;
+/* FLOAT BOX */
+.box{
+margin-top:120px;
+height:400px;
+overflow:auto;
+background:rgba(0,50,100,0.2);
+border-radius:15px;
+box-shadow:0 0 20px #00ccff;
+animation:float 4s infinite;
 }
 
-/* ANIMATIONS */
-@keyframes float {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
+/* HYMN LIST */
+.item{
+padding:12px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+cursor:pointer;
 }
 
-@keyframes glow {
-    from { filter: drop-shadow(0 0 10px #00ccff); }
-    to { filter: drop-shadow(0 0 30px #00ccff); }
+.item:hover{
+background:#003366;
 }
 
-/* MUSIC NOTES */
-.note {
-    position: absolute;
-    font-size: 24px;
-    animation: move 10s linear infinite;
-    color: #00ccff;
+/* NOTES */
+.note{
+position:absolute;
+color:#00ccff;
+animation:fall linear infinite;
 }
 
-@keyframes move {
-    0% { transform: translateY(100vh); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(-10vh); opacity: 0; }
+@keyframes fall{
+0%{transform:translateY(-10vh);opacity:0;}
+50%{opacity:1;}
+100%{transform:translateY(100vh);opacity:0;}
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
 }
 </style>
 
 </head>
+
 <body>
 
 <!-- SPLASH -->
 <div id="splash">
 
-    <img src="logo.png" class="logo">
+<img src="logo.png" class="logo">
 
-    <img src="book.png" class="book">
+<div class="book">
+<span>
+CGAC<br>
+HYMN BOOKS<br>
+1 - 757
+</span>
+</div>
 
-    <div class="title">
-        CGAC HYMN BOOKS<br>
-        1 - 757
-    </div>
-
-    <div class="watermark">CGL MEDIA</div>
+<div class="cgl">CGL MEDIA</div>
 
 </div>
 
-<!-- INDEX -->
-<div id="index">
+<!-- HOME -->
+<div id="home">
 
-    <h2 style="text-align:center;">Hymn Index</h2>
+<img src="logo.png" class="logo">
 
-    <div class="hymn">Hymn 1 - Praise and Worship</div>
-    <div class="hymn">Hymn 2 - The Love of God</div>
-    <div class="hymn">Hymn 3 - Christ and Salvation</div>
-    <div class="hymn">Hymn 4 - Christian Life</div>
-    <div class="hymn">Hymn 5 - Faith and Trust</div>
+<h2 style="color:#00ccff;">HYMN INDEX</h2>
+
+<div class="box" id="list"></div>
+
+<div class="cgl">CGL MEDIA</div>
 
 </div>
 
 <script>
 
-/* SPLASH TO INDEX */
-setTimeout(() => {
-    document.getElementById("splash").style.display = "none";
-    document.getElementById("index").style.display = "block";
-    document.body.style.overflow = "auto";
-}, 4000);
+/* SPLASH */
+setTimeout(()=>{
+document.getElementById("splash").style.display="none";
+document.getElementById("home").style.display="block";
+document.body.style.overflow="auto";
+},3000);
 
-/* MUSIC NOTES */
-function createNote() {
-    const note = document.createElement("div");
-    note.classList.add("note");
-    note.innerHTML = "♪";
-    note.style.left = Math.random() * 100 + "vw";
-    note.style.animationDuration = (5 + Math.random() * 5) + "s";
-    document.body.appendChild(note);
+/* CREATE 1 - 757 */
+let list=document.getElementById("list");
 
-    setTimeout(() => note.remove(), 10000);
+for(let i=1;i<=757;i++){
+let div=document.createElement("div");
+div.className="item";
+div.innerText="Hymn "+i;
+
+/* REDIRECT */
+div.onclick=()=>{
+window.location.href=i+".html";
+};
+
+list.appendChild(div);
 }
 
-setInterval(createNote, 500);
+/* MUSIC NOTES */
+function note(){
+let n=document.createElement("div");
+n.className="note";
+n.innerHTML="♪";
+n.style.left=Math.random()*100+"vw";
+n.style.animationDuration=(3+Math.random()*5)+"s";
+document.body.appendChild(n);
+
+setTimeout(()=>n.remove(),8000);
+}
+setInterval(note,300);
 
 </script>
 
