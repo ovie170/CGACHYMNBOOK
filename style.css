@@ -1,0 +1,78 @@
+body {
+    margin: 0;
+    font-family: Arial;
+    color: white;
+    overflow: hidden;
+}
+
+/* BACKGROUND */
+.background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url('../assets/background.png') no-repeat center/cover;
+    z-index: -2;
+}
+
+/* CONTAINER */
+.container {
+    text-align: center;
+    padding-top: 20px;
+}
+
+/* LOGO */
+.logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+/* WATERMARK */
+.watermark {
+    color: #00ccff;
+    text-shadow: 0 0 20px #00ccff;
+}
+
+/* GLASS BOX */
+.glass-box {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.05);
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+/* NUMBER BOX */
+.box {
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.box:hover {
+    background: rgba(0,200,255,0.3);
+}
+
+/* MUSIC NOTES */
+.notes::before {
+    content: "🎵 🎶 🎵 🎶 🎵";
+    position: absolute;
+    width: 100%;
+    animation: float 10s linear infinite;
+    font-size: 30px;
+    opacity: 0.5;
+}
+
+@keyframes float {
+    from { transform: translateY(100vh); }
+    to { transform: translateY(-10vh); }
+}
