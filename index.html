@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CGAC Hymn Book</title>
+
+<style>
+/* ================= GLOBAL ================= */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(180deg, #0A192F, #020C1B);
+  color: #EAF6FF;
+  overflow-x: hidden;
+}
+
+/* ================= SPLASH ================= */
+#splash {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #020C1B;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 999;
+}
+
+.book {
+  width: 80px;
+  height: 80px;
+  border: 3px solid #00CFFF;
+  border-radius: 10px;
+  animation: openBook 2s ease-in-out infinite alternate;
+}
+
+@keyframes openBook {
+  0% { transform: scale(1) rotateY(0deg); }
+  100% { transform: scale(1.1) rotateY(25deg); }
+}
+
+.title {
+  margin-top: 20px;
+  font-size: 26px;
+  font-weight: bold;
+  animation: fadeIn 2s ease-in-out;
+}
+
+.subtitle {
+  font-size: 14px;
+  opacity: 0.7;
+  animation: slideUp 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ================= MAIN ================= */
+#app {
+  display: none;
+  padding: 10px;
+}
+
+/* watermark logo */
+.watermark {
+  position: fixed;
+  width: 300px;
+  opacity: 0.05;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: glow 4s infinite alternate;
+}
+
+@keyframes glow {
+  from { opacity: 0.03; }
+  to { opacity: 0.08; }
+}
+
+/* ================= MUSIC NOTES ================= */
+.note {
+  position: fixed;
+  color: #00CFFF;
+  font-size: 20px;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  from {
+    transform: translateY(-10vh);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+/* ================= GLASS BOX ================= */
+.glass {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid rgba(0,207,255,0.3);
+  box-shadow: 0 0 10px rgba(0,207,255,0.2);
+}
+
+/* ================= TOP BAR ================= */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  background: transparent;
+  border: 1px solid #00CFFF;
+  color: #00CFFF;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ================= LIST ================= */
+li {
+  list-style: none;
+  padding: 12px;
+  margin: 5px 0;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+li:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 10px #00CFFF;
+}
+
+/* ================= VIEWER ================= */
+#viewer {
+  display: none;
+}
+
+pre {
+  white-space: pre-wrap;
+  font-size: 14px;
+}
+
+/* floating glow box */
+.glow-box {
+  position: absolute;
+  border: 2px solid #00CFFF;
+  border-radius: 20px;
+  width: 120px;
+  height: 120px;
+  animation: moveBox 6s infinite alternate;
+}
+
+@keyframes moveBox {
+  0% { top: 10%; left: 10%; }
+  100% { top: 70%; left: 70%; }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="book"></div>
+  <div class="title">CGAC HYMN BOOK</div>
+  <div class="subtitle">English & Yoruba (1 – 757)</div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+
+  <img src="logo.png" class="watermark">
+
+  <div class="glow-box"></div>
+
+  <!-- TOP -->
+  <div class="glass topbar">
+    <h3>📖 Hymns</h3>
+    <button onclick="toggleLang()">Switch Language</button>
+  </div>
+
+  <!-- LIST -->
+  <ul id="list"></ul>
+
+  <!-- VIEW -->
+  <div id="viewer" class="glass">
+    <h3 id="title"></h3>
+    <pre id="lyrics"></pre>
+  </div>
+
+</div>
+
+<script>
+
+/* SPLASH → MAIN */
+setTimeout(() => {
+  document.getElementById("splash").style.display = "none";
+  document.getElementById("app").style.display = "block";
+}, 3000);
+
+/* FAKE DATA (replace later with hymns.json) */
+let hymns = [];
+for (let i = 1; i <= 757; i++) {
+  hymns.push({
+    number: i,
+    english: { title: "Hymn " + i, lyrics: "English lyrics " + i },
+    yoruba: { title: "Orin " + i, lyrics: "Yoruba lyrics " + i }
+  });
+}
+
+/* LANGUAGE */
+let lang = "english";
+
+/* SHOW LIST */
+const list = document.getElementById("list");
+
+hymns.forEach(h => {
+  let li = document.createElement("li");
+  li.className = "glass";
+  li.innerText = `[${h.number}] ${h.english.title}`;
+  li.onclick = () => openHymn(h);
+  list.appendChild(li);
+});
+
+/* OPEN HYMN */
+function openHymn(h) {
+  document.getElementById("viewer").style.display = "block";
+
+  if (lang === "english") {
+    title.innerText = h.english.title;
+    lyrics.innerText = h.english.lyrics;
+  } else {
+    title.innerText = h.yoruba.title;
+    lyrics.innerText = h.yoruba.lyrics;
+  }
+}
+
+/* SWITCH LANGUAGE */
+function toggleLang() {
+  lang = lang === "english" ? "yoruba" : "english";
+}
+
+/* MUSIC NOTES */
+function createNotes() {
+  for (let i = 0; i < 20; i++) {
+    let note = document.createElement("div");
+    note.className = "note";
+    note.innerText = "🎵";
+    note.style.left = Math.random() * 100 + "vw";
+    note.style.animationDuration = (3 + Math.random() * 5) + "s";
+    document.body.appendChild(note);
+  }
+}
+createNotes();
+
+</script>
+
+</body>
+</html>
